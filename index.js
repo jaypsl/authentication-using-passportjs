@@ -19,7 +19,7 @@ app.use(require('express-session')({
     resave : false,
     saveUninitialized : false
 }))
-
+passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -53,6 +53,20 @@ app.post('/register', (req,res)=> {
         })
     })
 })
+
+//login route
+//render login form
+app.get('/login', (req,res)=> {
+    res.render('login')
+})
+
+
+app.post('/login', passport.authenticate('local',{
+    successRedirect : '/secret',
+    failureRedirect : '/login'
+}),(req,res)=> {
+
+});
 
 app.listen(3000, ()=> {
     console.log('server is running at 3000')
